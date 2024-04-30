@@ -1,0 +1,1 @@
+psql -h 0.0.0.0 -p 5122 -d demodb -U demouser -W
