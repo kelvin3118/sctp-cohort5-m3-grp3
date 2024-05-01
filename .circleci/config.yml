@@ -10,11 +10,12 @@ orbs:
   snyk: snyk/snyk@1.5.0
 
 jobs:
+
   scan:
     docker:
       - image: cimg/node:16.10
     environment:
-      IMAGE_NAME: kelvin3118/education-space
+      IMAGE_NAME: kelvin3118/sctp-cohort5-m4-grp3
     steps:
       - checkout
       - setup_remote_docker
@@ -22,6 +23,21 @@ jobs:
       - run: docker build -t $IMAGE_NAME .
       - snyk/scan:
           docker-image-name: $IMAGE_NAME
+          severity-threshold: critical
+
+  publish: #also known as build-and-push
+    executor: docker/docker #define the execution environment in which the steps of a job will run
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - docker/build: #build the image
+          image: kelvin3118/sctp-cohort5-m4-grp3
+          tag: v1.0.0
+      - docker/push: #pushes the image to the specified account in the environment
+          image: kelvin3118/sctp-cohort5-m4-grp3
+          tag: v1.0.0
+
 executors:
   openjdk17:
     docker:
@@ -48,7 +64,10 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - scan # scan job
+      # - scan 
+      - publish:
+          requires:
+            - maven/test
 
 # workflows:
 #   version: 2
