@@ -16,14 +16,11 @@ jobs:
       - image: cimg/node:16.10
     steps:
       - setup_remote_docker
-      - heroku/install
       - checkout
       - run:
           name: Heroku Container Push
           command: |
-            heroku container:login
-            heroku container:push web -a kelvin3118-su-devops
-            heroku container:release web -a kelvin3118-su-devops
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git main            
   scan:
     docker:
       - image: cimg/node:16.10
@@ -37,7 +34,6 @@ jobs:
       - snyk/scan:
           docker-image-name: $IMAGE_NAME
           severity-threshold: critical
-
   publish: #also known as build-and-push
     executor: docker/docker #define the execution environment in which the steps of a job will run
     steps:
@@ -50,7 +46,6 @@ jobs:
       - docker/push: #pushes the image to the specified account in the environment
           image: kelvin3118/sctp-cohort5-m4-grp3
           tag: v1.0.0
-
 executors:
   openjdk17:
     docker:
@@ -77,10 +72,16 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          filters:
+            branches:
+              only: develop
       # - scan
       - publish:
           requires:
             - maven/test
+          filters:
+            branches:
+              only: develop
       - deploy:
           requires:
             - publish
