@@ -74,14 +74,14 @@ workflows:
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
           filters:
             branches:
-              only: develop
+              only: develop, release
       # - scan
       - publish:
           requires:
             - maven/test
           filters:
             branches:
-              only: develop
+              only: develop, release
       - deploy:
           requires:
             - publish
