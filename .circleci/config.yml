@@ -95,9 +95,3 @@ workflows:
 #           filters:
 #             branches:
 #               only: release
-#       - deploy:
-#           requires:
-#             - test
-#           filters:
-#             branches:
-#               only: release
