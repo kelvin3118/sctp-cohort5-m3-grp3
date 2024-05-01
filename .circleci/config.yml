@@ -8,9 +8,22 @@ orbs:
   maven: circleci/maven@1.3
   docker: circleci/docker@2.1.4
   snyk: snyk/snyk@1.5.0
+  heroku: circleci/heroku@2.0.0
 
 jobs:
-
+  deploy:
+    docker:
+      - image: cimg/node:16.10
+    steps:
+      - setup_remote_docker
+      - heroku/install
+      - checkout
+      - run:
+          name: Heroku Container Push
+          command: |
+            heroku container:login
+            heroku container:push web -a kelvin3118-su-devops
+            heroku container:release web -a kelvin3118-su-devops
   scan:
     docker:
       - image: cimg/node:16.10
@@ -67,15 +80,19 @@ workflows:
           filters:
             branches:
               only: develop
-
-      # - scan 
+      # - scan
       - publish:
           requires:
             - maven/test
           filters:
             branches:
               only: develop
-
+      - deploy:
+          requires:
+            - publish
+          filters:
+            branches:
+              only: release
 # workflows:
 #   version: 2
 #   cicd_flow:
