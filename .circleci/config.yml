@@ -77,51 +77,13 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
-          filters:
-            branches:
-              only: develop
       # - scan
       - publish:
           requires:
             - maven/test
-          filters:
-            branches:
-              only: develop
       - deploy:
           requires:
             - publish
           filters:
             branches:
               only: release
-# workflows:
-#   version: 2
-#   cicd_flow:
-#     jobs:
-#       - build:
-#           filters:
-#             branches:
-#               only: main
-#       - test:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: main
-#       - scan:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: main
-#       - publish:
-#           requires:
-#             - test
-#           filters:
-#             branches:
-#               only: release
-#       - deploy:
-#           requires:
-#             - test
-#           filters:
-#             branches:
-#               only: release
