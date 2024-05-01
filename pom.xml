@@ -68,12 +68,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-				<!-- Dependency for outdated version maven shared vulnerabilities fix  -->
+		<!-- Dependency for outdated version maven shared vulnerabilities fix  -->
 		<dependency>
-    <groupId>org.apache.maven.shared</groupId>
-    <artifactId>maven-shared-utils</artifactId>
-    <version>3.3.3</version>
-</dependency>
+		<groupId>org.apache.maven.shared</groupId>
+		<artifactId>maven-shared-utils</artifactId>
+		<version>3.4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+			<version>3.0.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-archiver</artifactId>
+			<version>4.8.0</version>
+		</dependency>
 		<!-- Swagger dependencies for API documentation -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
