@@ -33,10 +33,10 @@ jobs:
       - docker/check
       - docker/build: #build the image
           image: kelvin3118/sctp-cohort5-m4-grp3
-          tag: v1.0.1
+          tag: v1.0.0
       - docker/push: #pushes the image to the specified account in the environment
           image: kelvin3118/sctp-cohort5-m4-grp3
-          tag: v1.0.1
+          tag: v1.0.0
 
 executors:
   openjdk17:
