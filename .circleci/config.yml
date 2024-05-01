@@ -1,68 +1,21 @@
 version: 2.1
-
 orbs:
-  # The maven orb contains a set of prepackaged circleci configuration you can use repeatedly in your configurations files
-  # Orb commands and jobs help you with common scripting around a language/tool
-  # so you dont have to copy and paste it everywhere.
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/maven
-  maven: circleci/maven@1.3
-
-executors:
-  openjdk17:
-    docker:
-      - image: cimg/openjdk:17.0
-      - image: cimg/postgres:15.6
-        environment:
-          POSTGRES_USER: demouser
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: demodb
-
+  maven-build: inclasstoday/maven-build@2.1.1
 workflows:
-  verify: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
-    # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  version: 2.1
+  verify_and_build:
     jobs:
-      - maven/test:
-          executor: openjdk17
+      - maven-build/docker_build:
+          context: maven-build
           pre-steps:
             - run:
-                name: Install dockerize
-                command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+                name: Setting environment vars
+                command: |
+                  echo "Set environment vars"
+                  printenv >> ${BASH_ENV}
                 environment:
-                  DOCKERIZE_VERSION: v0.6.1
-            - run:
-                name: Wait for db
-                command: dockerize -wait tcp://localhost:5432 -timeout 1m
-
-# workflows:
-#   version: 2
-#   cicd_flow:
-#     jobs:
-#       - build:
-#           filters:
-#             branches:
-#               only: main
-#       - test:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: main
-#       - scan:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: main
-#       - publish:
-#           requires:
-#             - test
-#           filters:
-#             branches:
-#               only: release
-#       - deploy:
-#           requires:
-#             - test
-#           filters:
-#             branches:
-#               only: release
+                  - DB_HOST: postgres
+                  - SFTP_HOST: sftp-container
+          with_docker: true
+          copy_docker_resources: docker
+          run_docker_compose: true
