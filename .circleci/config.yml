@@ -6,7 +6,23 @@ orbs:
   # so you dont have to copy and paste it everywhere.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/maven
   maven: circleci/maven@1.3
+  docker: circleci/docker@2.1.4
+  snyk: snyk/snyk@1.5.0
 
+jobs:
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+      IMAGE_NAME: kelvin3118/education-space
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run: docker build -t $IMAGE_NAME .
+      - snyk/scan:
+          docker-image-name: $IMAGE_NAME
+          severity-threshold: critical
 executors:
   openjdk17:
     docker:
@@ -33,6 +49,8 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - scan: # scan job
+
 # workflows:
 #   version: 2
 #   cicd_flow:
