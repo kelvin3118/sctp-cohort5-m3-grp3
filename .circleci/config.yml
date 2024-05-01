@@ -64,7 +64,7 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      # - scan 
+      - scan 
       - publish:
           requires:
             - maven/test
