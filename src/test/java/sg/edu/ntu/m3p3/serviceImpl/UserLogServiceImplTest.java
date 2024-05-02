@@ -82,6 +82,6 @@ public class UserLogServiceImplTest {
         userLogService.deleteUserLogsById(userLogId);
 
         // Verify that deleteById method is called with any UUID argument
-        verify(userLogRepository, times(3)).deleteById(any(UUID.class));
+        verify(userLogRepository, times(1)).deleteById(any(UUID.class));
     }
 }
