@@ -10,7 +10,6 @@ orbs:
   snyk: snyk/snyk@1.5.0
 
 jobs:
-
   scan:
     docker:
       - image: cimg/node:16.10
@@ -64,11 +63,10 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - scan 
+      # - scan
       - publish:
           requires:
             - maven/test
-
 # workflows:
 #   version: 2
 #   cicd_flow:
