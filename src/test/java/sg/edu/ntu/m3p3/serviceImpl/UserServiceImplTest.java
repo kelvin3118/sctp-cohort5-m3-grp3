@@ -110,8 +110,8 @@ public class UserServiceImplTest {
         User user = new User();
         user.setUserName("testUser");
         user.setPassword("password");
-        user.setFirstName("John");
-        user.setLastName("Doe");
+        user.setFirstName("123");
+        user.setLastName("123");
         user.setEmail("john@example.com");
         return user;
     }
