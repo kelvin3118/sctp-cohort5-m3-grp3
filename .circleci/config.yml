@@ -66,7 +66,7 @@ workflows:
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
       # - scan
       - owasp/maven_owasp_dependency_check:
-          executor: java_17
+          executor: java_11
           context: global
       - publish:
           requires:
