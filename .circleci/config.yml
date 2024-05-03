@@ -9,9 +9,9 @@ orbs:
   docker: circleci/docker@2.1.4
   snyk: snyk/snyk@1.5.0
   heroku: circleci/heroku@2.0.0
+  owasp: entur/owasp@0.0.19
 
 jobs:
-
   deploy:
     docker:
       - image: cimg/node:16.10
@@ -63,7 +63,7 @@ executors:
           POSTGRES_DB: demodb
 
 workflows:
-  build-and-test: # This is the name of the workflow, feel free to change it to better match your workflow.
+  cicd_flow: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
     jobs:
@@ -78,37 +78,13 @@ workflows:
             - run:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - scan 
+      # - scan
+      - owasp/maven_owasp_dependency_check:
+          executor: openjdk17
+          context: global
       - publish:
           requires:
             - maven/test
       - deploy:
           requires:
             - publish
-
-# workflows:
-#   version: 2
-#   cicd_flow:
-#     jobs:
-#       - build:
-#           filters:
-#             branches:
-#               only: main
-#       - test:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: main
-#       - scan:
-#           requires:
-#             - build
-#           filters:
-#             branches:
-#               only: main
-#       - publish:
-#           requires:
-#             - test
-#           filters:
-#             branches:
-#               only: release
