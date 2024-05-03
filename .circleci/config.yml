@@ -9,6 +9,7 @@ orbs:
   docker: circleci/docker@2.1.4
   snyk: snyk/snyk@1.5.0
   heroku: circleci/heroku@2.0.0
+  owasp: entur/owasp@0.0.19
 
 jobs:
   deploy:
@@ -79,6 +80,12 @@ workflows:
             branches:
               only: develop, release
       # - scan
+      - owasp/maven_owasp_dependency_check:
+          executor: openjdk17
+          context: global
+          filters:
+            branches:
+              only: develop, release
       - publish:
           requires:
             - maven/test
