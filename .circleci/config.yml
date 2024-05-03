@@ -8,6 +8,7 @@ orbs:
   maven: circleci/maven@1.3
   docker: circleci/docker@2.1.4
   snyk: snyk/snyk@1.5.0
+  owasp: entur/owasp@0.0.19
 
 jobs:
   scan:
@@ -64,6 +65,9 @@ workflows:
                 name: Wait for db
                 command: dockerize -wait tcp://localhost:5432 -timeout 1m
       # - scan
+      - owasp/maven_owasp_dependency_check:
+          executor: java_17
+          context: global
       - publish:
           requires:
             - maven/test
