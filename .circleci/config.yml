@@ -56,11 +56,11 @@ executors:
   openjdk17:
     docker:
       - image: cimg/openjdk:17.0
-      - image: cimg/postgres:15.6
-        environment:
-          POSTGRES_USER: demouser
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: demodb
+      # - image: cimg/postgres:15.6
+      #   environment:
+      #     POSTGRES_USER: demouser
+      #     POSTGRES_PASSWORD: password
+      #     POSTGRES_DB: demodb
 
 workflows:
   cicd_flow: # This is the name of the workflow, feel free to change it to better match your workflow.
