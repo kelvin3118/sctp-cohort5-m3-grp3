@@ -83,7 +83,8 @@ workflows:
           name: scan
           executor: openjdk17
           context: global
-          requires: maven/test
+          requires:
+            - maven/test
       - publish:
           requires:
             - maven/test
